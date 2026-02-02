@@ -5,7 +5,7 @@ using UAFaar.Board;
 public class TestSpawn : MonoBehaviour
 {
     [SerializeField] private CardLibrary cardLibrary;
-    [SerializeField] private BoardManager boardManager;
+    [SerializeField] private Board boardManager;
     [SerializeField] private int pairCount = 4;
 
     //TEsting
@@ -13,5 +13,6 @@ public class TestSpawn : MonoBehaviour
     {
         var cards = cardLibrary.GetRandomPairs(pairCount);
         boardManager.CreateBoard(cards);
+        //var cards = boardManager.CreateBoard(cardLibrary.GetRandomPairs(pairCount));
     }
 }

@@ -1,6 +1,8 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.UI;
 using System;
+using UAFaar.Gameplay;
 
 namespace UAFaar.Cards
 {
@@ -11,7 +13,7 @@ namespace UAFaar.Cards
         [SerializeField] private Image frontImage;
         [SerializeField] private Image backImage;
         [SerializeField] private Button button;
-
+        [SerializeField] private CardFlipAnimation animator;
         public CardData Data { get; private set; }
 
         private bool isFaceUp;
@@ -23,6 +25,7 @@ namespace UAFaar.Cards
             Data = data;
             frontImage.sprite = data.FrontSprite;
             SetFaceDown();
+            GameManager.Instance.RegisterCard(this);
         }
 
         private void Awake()
@@ -32,26 +35,31 @@ namespace UAFaar.Cards
 
         private void HandleClick()
         {
-            Debug.Log("Card Clicked");
+            //Debug.Log("Card Clicked");
             if (isFaceUp || isMatched)
                 return;
 
-            OnSelected?.Invoke(this);
+            OnSelected?.Invoke(this); // send this card to Event
         }
         #region Flipping
         //Flipping Logic
         public void FlipUp()
         {
             isFaceUp = true;
-            frontImage.gameObject.SetActive(true);
-            backImage.gameObject.SetActive(false);
+            StartCoroutine(FlipRoutine(true));
         }
 
         public void FlipDown()
         {
             isFaceUp = false;
-            frontImage.gameObject.SetActive(false);
-            backImage.gameObject.SetActive(true);
+            StartCoroutine(FlipRoutine(false));
+        }
+        private IEnumerator FlipRoutine(bool showFront)
+        {
+            yield return animator.Flip(showFront);
+
+            frontImage.gameObject.SetActive(showFront);
+            backImage.gameObject.SetActive(!showFront);
         }
         #endregion
 

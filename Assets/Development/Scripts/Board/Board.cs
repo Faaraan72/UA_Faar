@@ -4,7 +4,7 @@ using UAFaar.Cards;
 
 namespace UAFaar.Board
 {
-    public class BoardManager : MonoBehaviour
+    public class Board : MonoBehaviour
     {
         [SerializeField] private CardView cardPrefab;
         [SerializeField] private Transform cardParent;
