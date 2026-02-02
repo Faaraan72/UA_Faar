@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9229306ed05aa24ca37fb44251af08f, type: 3}
+  m_Name: Default
+  m_EditorClassIdentifier: 
+  Cards:
+  - Id: 1
+    FrontSprite: {fileID: 21300000, guid: c358b967ac3ddc64a8353aea282fe2a7, type: 3}
+  - Id: 2
+    FrontSprite: {fileID: 21300000, guid: bc39b8ad98e17404cbcc0dff281c7d66, type: 3}
+  - Id: 3
+    FrontSprite: {fileID: 21300000, guid: f0a1de383f44bbf46be0e74905207e6e, type: 3}
+  - Id: 4
+    FrontSprite: {fileID: 21300000, guid: cc80af33cc7918d49be1530584e4cf36, type: 3}
+  - Id: 5
+    FrontSprite: {fileID: 21300000, guid: e26fd3add803d0a4e90059ac798f7fc1, type: 3}
+  - Id: 6
+    FrontSprite: {fileID: 21300000, guid: 765dbab8ebfefe740bed97d4e9facd42, type: 3}
+  - Id: 7
+    FrontSprite: {fileID: 21300000, guid: e9b016bbdb223eb4f8bc1838ebb9be09, type: 3}
+  - Id: 8
+    FrontSprite: {fileID: 21300000, guid: 19e45b94fc644ac41afe62d1479ed913, type: 3}
