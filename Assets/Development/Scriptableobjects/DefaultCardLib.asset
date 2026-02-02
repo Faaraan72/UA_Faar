@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9229306ed05aa24ca37fb44251af08f, type: 3}
-  m_Name: Default
+  m_Name: DefaultCardLib
   m_EditorClassIdentifier: 
   Cards:
   - Id: 1

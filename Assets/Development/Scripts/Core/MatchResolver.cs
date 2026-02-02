@@ -1,6 +1,6 @@
 using UAFaar.Cards;
 
-namespace UAFaar.Gameplay
+namespace UAFaar.Core
 {
     public static class MatchResolver
     {

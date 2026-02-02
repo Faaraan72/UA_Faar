@@ -1,9 +1,11 @@
 using UnityEngine;
 using UAFaar.Cards;
-using UAFaar.Managers;
+using UAFaar.Board;
+using UAFaar.UI;
 using System.Collections;
+using UAFaar.Core;
 
-namespace UAFaar.Gameplay
+namespace UAFaar.Managers
 {
     public class GameManager : MonoBehaviour
     {
@@ -14,6 +16,11 @@ namespace UAFaar.Gameplay
         
         [SerializeField] private ScoreManager scoreManager;
         [SerializeField] private AudioManager audioManager;
+        [SerializeField] private CardLibrary cardLibrary;
+        [SerializeField] private BoardGenerator boardGen;
+        [SerializeField] private UIManager uiManager;
+        [SerializeField] private LevelManager levelManager;
+        [SerializeField] private int currentLevel = 4;
 
         private bool isResolving;
 
@@ -26,11 +33,29 @@ namespace UAFaar.Gameplay
             }
             Instance = this;
         }
+        // Start Game
+        public void StartGame()
+        {
+            LevelData level = levelManager.GetLevel(currentLevel);
+            var cards = cardLibrary.GetRandomPairs(level.pairCount);
+            boardGen.CreateBoard(cards, level.pairCount * 2);
+        }
 
         //Register Cards on itinitalization
         public void RegisterCard(CardView card)
         {
             card.OnSelected += HandleCardSelected;
+        }
+        // Level Completed
+        private void OnLevelCompleted()
+        {
+            currentLevel++;
+
+            uiManager.ShowEndScreen(
+                true,
+                scoreManager.Score,
+                currentLevel
+            );
         }
 
         // Event for card Selection 
@@ -68,7 +93,11 @@ namespace UAFaar.Gameplay
                 secondSelected.MarkAsMatched();
                 scoreManager.OnMatch();
                 audioManager.PlayMatch();
-
+                uiManager.UpdateScore(scoreManager.Score);
+                if (boardGen.AreAllCardsMatched())
+                {
+                    OnLevelCompleted();
+                }
             }
             else
             {

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System;
-using UAFaar.Gameplay;
+using UAFaar.Managers;
 
 namespace UAFaar.Cards
 {
@@ -17,7 +17,7 @@ namespace UAFaar.Cards
         public CardData Data { get; private set; }
 
         private bool isFaceUp;
-        private bool isMatched;
+        public bool isMatched { get; private set; }
 
         //Initialize Card Data
         public void Initialize(CardData data)
