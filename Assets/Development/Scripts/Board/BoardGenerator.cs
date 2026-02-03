@@ -13,7 +13,7 @@ namespace UAFaar.Board
         [SerializeField] private GridScaler gridScaler;
         private readonly List<CardView> activeCards = new();
 
-        //Prepares the Board
+        //Prepare the Board
         public List<CardView> CreateBoard(List<CardData> cards , int cardCount)
         {
             ClearBoard();
@@ -37,7 +37,7 @@ namespace UAFaar.Board
             return true;
         }
 
-        private void ClearBoard()
+        public void ClearBoard()
         {
             foreach (var card in activeCards)
                 Destroy(card.gameObject);

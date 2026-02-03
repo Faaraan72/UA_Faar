@@ -14,7 +14,6 @@ namespace UAFaar.Cards
             // Shrink X
             yield return ScaleX(1f, 0f, half);
 
-            // Swap visual happens outside (CardView)
 
             // Expand X
             yield return ScaleX(0f, 1f, half);

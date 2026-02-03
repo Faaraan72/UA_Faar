@@ -1,46 +1,82 @@
 using UnityEngine;
 using TMPro;
+using UAFaar.Managers;
 namespace UAFaar.UI
 {
     public class UIManager : MonoBehaviour
     {
+        [Header("Panels")]
         [SerializeField] private GameObject startScreen;
-        [SerializeField] private GameObject hud;
+        [SerializeField] private GameObject GameplayScreen;
         [SerializeField] private GameObject endScreen;
 
+        [Header("Texts")]
         [SerializeField] private TextMeshProUGUI ResultScoreText;
         [SerializeField] private TextMeshProUGUI ResultText;
         [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private TextMeshProUGUI timeText;
+
+        [Header("Stats Text")]
+        [SerializeField] private TextMeshProUGUI bestScoreText;
+        [SerializeField] private TextMeshProUGUI bestLevelText;
+
+        [Header("EndScreen Btns")]
+        [SerializeField] private GameObject RetryBtn;
+        [SerializeField] private GameObject NextLevelBtn;
+        
+
+
+
         public void ShowStart()
         {
             startScreen.SetActive(true);
-            hud.SetActive(false);
+            GameplayScreen.SetActive(false);
             endScreen.SetActive(false);
         }
 
         public void ShowGame()
         {
             startScreen.SetActive(false);
-            hud.SetActive(true);
+            GameplayScreen.SetActive(true);
             endScreen.SetActive(false);
         }
 
-        public void ShowEnd()
+        public void UpdateTime(float time)
         {
-            startScreen.SetActive(false);
-            hud.SetActive(false);
-            endScreen.SetActive(true);
+            timeText.text = Mathf.CeilToInt(time).ToString();
         }
 
         public void UpdateScore(int score)
         {
             scoreText.text = $"Score : {score}";
         }
-        public void ShowEndScreen(bool won, int score, int nextLevel)
+        public void ShowEndScreen(bool won, int score)
         {
             endScreen.SetActive(true);
-            ResultText.text = won ? $"GAME WON" : "GAME LOST";
+            if(won)
+            {
+                ResultText.text = "LEVEL WON";
+                RetryBtn.SetActive(false);
+                NextLevelBtn.SetActive(true);
+            }
+            else
+            {
+                ResultText.text = "GAME LOST";
+                RetryBtn.SetActive(true);
+                NextLevelBtn.SetActive(false);
+            }
+            
             ResultScoreText.text = $"Your Score : {score} ";
+        }
+        public void ShowCareerStats(int highScore, int bestLevel)
+        {
+            bestScoreText.text = $"Best Score: {highScore}";
+            bestLevelText.text = $"Best Level: {bestLevel}";
+        }
+        public void Retry()
+        {
+            GameManager.Instance.RetryGame();
+            UpdateScore(0);
         }
     }
 }

@@ -5,6 +5,7 @@ namespace UAFaar.Core
 {
     public class GridScaler : MonoBehaviour
     {
+        [Header("Grid")]
         [SerializeField] private GridLayoutGroup grid;
         [SerializeField] private RectTransform parent;
 
