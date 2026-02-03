@@ -25,6 +25,10 @@ namespace UAFaar.Managers
         [SerializeField] private LevelManager levelManager;
         [SerializeField] private GameTimer gameTimer;
 
+        [Header("Preview Duration")]
+        [SerializeField] private float previewDuration = 1f;
+        private List<CardView> activeCards;
+
         //Stats
         private int currentLevel;
         private int currentScore;
@@ -50,6 +54,7 @@ namespace UAFaar.Managers
         {
             LoadCareerStats();          //Load Stats
             uiManager.ShowStart();      // Show game StartScreen
+            
         }
         private void LoadCareerStats()
         {
@@ -66,8 +71,9 @@ namespace UAFaar.Managers
         {
             LevelData level = levelManager.GetLevel(currentLevel);      //currentlevel
             var cards = cardLibrary.GetRandomPairs(level.pairCount);    //get Pars from level data
-            boardGen.CreateBoard(cards, level.pairCount * 2);           // generate Board
-            gameTimer.StartTimer(level.timeLimit);                      //Start Timer
+            activeCards = boardGen.CreateBoard(cards);           // generate Board
+            StartCoroutine(LevelPreviewRoutine(level.timeLimit));
+           //gameTimer.StartTimer(level.timeLimit);                      //Start Timer
         }
 
         //Register Cards on itinitalization
@@ -76,6 +82,25 @@ namespace UAFaar.Managers
             card.OnSelected += HandleCardSelected;          //Subscribe the card selection event
         }
 
+        private IEnumerator LevelPreviewRoutine(float timeLimit)
+        {
+            isResolving = true; // block selection of cards
+
+            // Flip all cards up
+            foreach (var card in activeCards)
+                card.FlipUpInstant();
+
+            yield return new WaitForSeconds(previewDuration);
+
+            // Flip all cards down
+            foreach (var card in activeCards)
+                card.FlipDownInstant();
+
+            yield return new WaitForSeconds(0.2f); //  delay
+
+            isResolving = false;
+            gameTimer.StartTimer(timeLimit);
+        }
 
 
         // Event for card Selection 
@@ -103,10 +128,9 @@ namespace UAFaar.Managers
 
         private IEnumerator ResolveMatch()
         {
-            isResolving = true;             //checking
-
             yield return new WaitForSeconds(0.5f);
-
+            scoreManager.RegisterMove();
+            uiManager.UpdateMoves(scoreManager.Moves);
             bool isMatch = MatchResolver.IsMatch(firstSelected, secondSelected);            // returns matched or not based on id
 
             if (isMatch)
@@ -118,7 +142,7 @@ namespace UAFaar.Managers
                 uiManager.UpdateScore(scoreManager.Score);
                 if (boardGen.AreAllCardsMatched())
                 {
-                    OnLevelCompleted();                     // if all matched , level completed
+                    StartCoroutine(OnLevelCompletedRoutine());                     // if all matched , level completed
                 }
             }
             else
@@ -132,14 +156,15 @@ namespace UAFaar.Managers
 
             firstSelected = null;                   //empty the holders
             secondSelected = null;
-            isResolving = false;
         }
 
         // Level Completed
-        private void OnLevelCompleted()
+        private IEnumerator OnLevelCompletedRoutine()
         {
+            
+            yield return new WaitForSeconds(0.4f);
             currentScore = scoreManager.Score;          //if currScore is greater than highest user Score, make it highestScore
-
+            audioManager.PlayLevelComplete();
             if (currentScore > highScore)
                 highScore = currentScore;
 
@@ -151,7 +176,8 @@ namespace UAFaar.Managers
             currentLevel++;                             //ncrement level
 
             uiManager.ShowEndScreen(true, currentScore);    // Show completed Screen
-
+            uiManager.UpdateLevelText(currentLevel);
+            //Debug.Log("Current Level" + currentLevel); 
             gameTimer.StopTimer();                          //Stop timer
         }
         private void HandleTimeUp()                 //Time Up Same way as loose
@@ -167,7 +193,7 @@ namespace UAFaar.Managers
                 highestLevelReached = currentLevel;
 
             SaveCareerStats();
-
+            audioManager.PlayGameOver();
             uiManager.ShowEndScreen(false,scoreManager.Score);
         }
 

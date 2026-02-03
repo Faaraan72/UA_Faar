@@ -15,6 +15,8 @@ namespace UAFaar.UI
         [SerializeField] private TextMeshProUGUI ResultText;
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private TextMeshProUGUI timeText;
+        [SerializeField] private TextMeshProUGUI movesText;
+        [SerializeField] private TextMeshProUGUI currLeveltext;
 
         [Header("Stats Text")]
         [SerializeField] private TextMeshProUGUI bestScoreText;
@@ -43,17 +45,26 @@ namespace UAFaar.UI
 
         public void UpdateTime(float time)
         {
-            timeText.text = Mathf.CeilToInt(time).ToString();
+            timeText.text = "Time: "+Mathf.CeilToInt(time).ToString();
         }
 
         public void UpdateScore(int score)
         {
-            scoreText.text = $"Score : {score}";
+            scoreText.text = $"Score: {score}";
         }
+        public void UpdateMoves(int moves)
+        {
+            movesText.text = $"Moves: {moves}";
+        }
+        public void UpdateLevelText(int level)
+        {
+            currLeveltext.text = $"Current Level: {level}";
+        }
+
         public void ShowEndScreen(bool won, int score)
         {
             endScreen.SetActive(true);
-            if(won)
+            if (won)
             {
                 ResultText.text = "LEVEL WON";
                 RetryBtn.SetActive(false);
@@ -70,8 +81,8 @@ namespace UAFaar.UI
         }
         public void ShowCareerStats(int highScore, int bestLevel)
         {
-            bestScoreText.text = $"Best Score: {highScore}";
-            bestLevelText.text = $"Best Level: {bestLevel}";
+            bestScoreText.text = $"Your Best Score: {highScore}";
+            bestLevelText.text = $"Your Best Level: {bestLevel}";
         }
         public void Retry()
         {

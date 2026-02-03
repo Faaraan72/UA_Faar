@@ -29,3 +29,11 @@ MonoBehaviour:
     FrontSprite: {fileID: 21300000, guid: e9b016bbdb223eb4f8bc1838ebb9be09, type: 3}
   - Id: 8
     FrontSprite: {fileID: 21300000, guid: 19e45b94fc644ac41afe62d1479ed913, type: 3}
+  - Id: 9
+    FrontSprite: {fileID: 21300000, guid: d25d3916452280749b8bc63b9cb39ceb, type: 3}
+  - Id: 10
+    FrontSprite: {fileID: 21300000, guid: 79222f304f856194fa80ce6ba36c42e8, type: 3}
+  - Id: 11
+    FrontSprite: {fileID: 21300000, guid: 8ee7a118fbeaca14c8b0506814b81c0e, type: 3}
+  - Id: 12
+    FrontSprite: {fileID: 21300000, guid: ec55fd605f64b7b4abc8d7491591f6a3, type: 3}

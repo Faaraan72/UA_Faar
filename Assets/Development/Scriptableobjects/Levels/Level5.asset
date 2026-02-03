@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Level5
   m_EditorClassIdentifier: 
   pairCount: 7
-  timeLimit: 30
+  timeLimit: 35

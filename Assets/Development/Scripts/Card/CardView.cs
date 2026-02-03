@@ -6,6 +6,12 @@ using UAFaar.Managers;
 
 namespace UAFaar.Cards
 {
+    public enum CardState
+    {
+        FaceDown,
+        FaceUp,
+        Matched
+    }
     public class CardView : MonoBehaviour
     {
         public event Action<CardView> OnSelected;
@@ -14,17 +20,16 @@ namespace UAFaar.Cards
         [SerializeField] private Image backImage;
         [SerializeField] private Button button;
         [SerializeField] private CardFlipAnimation animator;
-        public CardData Data { get; private set; }
 
-        private bool isFaceUp;
-        public bool isMatched { get; private set; }
+        public CardState State { get; private set; } = CardState.FaceDown;
+
+        public CardData Data { get; private set; }
 
         //Initialize Card Data
         public void Initialize(CardData data)
         {
             Data = data;
             frontImage.sprite = data.FrontSprite;
-            SetFaceDown();
             GameManager.Instance.RegisterCard(this);
         }
 
@@ -36,7 +41,7 @@ namespace UAFaar.Cards
         private void HandleClick()
         {
             //Debug.Log("Card Clicked");
-            if (isFaceUp || isMatched)
+            if (State != CardState.FaceDown)
                 return;
 
             OnSelected?.Invoke(this); // send this card to Event
@@ -45,13 +50,13 @@ namespace UAFaar.Cards
         //Flipping Logic
         public void FlipUp()
         {
-            isFaceUp = true;
+            State = CardState.FaceUp;
             StartCoroutine(FlipRoutine(true));
         }
 
         public void FlipDown()
         {
-            isFaceUp = false;
+            State = CardState.FaceDown;
             StartCoroutine(FlipRoutine(false));
         }
         private IEnumerator FlipRoutine(bool showFront)
@@ -61,22 +66,53 @@ namespace UAFaar.Cards
             frontImage.gameObject.SetActive(showFront);
             backImage.gameObject.SetActive(!showFront);
         }
+        
+        public void FlipUpInstant()
+        {
+            frontImage.gameObject.SetActive(true);
+            backImage.gameObject.SetActive(false);
+        }
+        public void FlipDownInstant()
+        {
+            frontImage.gameObject.SetActive(false);
+            backImage.gameObject.SetActive(true);
+        }
         #endregion
 
         #region Match
         //Set Cards as Matched
         public void MarkAsMatched()
         {
-            isMatched = true;
+            State = CardState.Matched;
             button.interactable = false;
+            PlayMatchAnimation();
         }
         #endregion
+
         
-        // Turn cards Back
-        private void SetFaceDown()
+        #region Matching Aniamtions
+        private void PlayMatchAnimation()
         {
-            frontImage.gameObject.SetActive(false);
-            backImage.gameObject.SetActive(true);
+            StartCoroutine(DisableRoutine());
         }
+        private IEnumerator DisableRoutine()
+        {
+            Vector3 startScale = transform.localScale;
+            Vector3 endScale = Vector3.zero;
+
+            float duration = 0.25f;
+            float t = 0f;
+
+            while (t < duration)
+            {
+                transform.localScale = Vector3.Lerp(startScale, endScale, t / duration);
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            transform.localScale = endScale;
+            gameObject.SetActive(false);
+        }
+        #endregion
     }
 }

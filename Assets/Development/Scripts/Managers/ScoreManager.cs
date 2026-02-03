@@ -5,15 +5,19 @@ namespace UAFaar.Managers
     public class ScoreManager : MonoBehaviour
     {
         public int Score { get; private set; }
+        public int Moves { get; private set; }
         private int combo;
 
         public void OnMatch()
         {
             combo++;
             Score += 10 * combo;
-            Debug.Log($"Score : {Score} , Combo : {combo}");
+            //Debug.Log($"Score : {Score} , Combo : {combo}");
         }
-
+        public void RegisterMove()
+        {
+            Moves++;
+        }
         public void OnMismatch()
         {
             combo = 0;
